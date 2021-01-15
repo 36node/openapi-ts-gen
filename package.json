@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc; cp src/templates/*.hbs dist/lib/templates",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@types/node": "^14.14.20",
