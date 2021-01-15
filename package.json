@@ -1,0 +1,29 @@
+{
+  "name": "@juocode/openapi-ts-gen",
+  "version": "0.0.3",
+  "description": "Generate typescript sdk from OpenAPI document",
+  "main": "dist/lib/index.js",
+  "typings": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "JuoCode <gjdrift@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc; cp src/templates/*.hbs dist/lib/templates",
+    "prepublish": "yarn build"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.20",
+    "@types/pluralize": "^0.0.29"
+  },
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "handlebars": "^4.7.6",
+    "minimist": "^1.2.5",
+    "openapi-types": "^7.2.2",
+    "pluralize": "^8.0.0",
+    "typescript": "^4.1.3",
+    "yaml": "^1.10.0"
+  }
+}
