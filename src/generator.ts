@@ -127,7 +127,7 @@ export class GeneratorContext {
   private resolveObjectSchema(node: any, { schemaName }: any) {
     const subSchemas = [];
     const properties = new Map<string, types.Property>();
-    Object.entries(node.properties).forEach(([propName, propNode]: any) => {
+    Object.entries(node.properties || {}).forEach(([propName, propNode]: any) => {
       const schema = this.resolveSchema(propNode, {
         schemaName: changeCase.pascalCase(propName),
       });
