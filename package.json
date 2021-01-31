@@ -1,6 +1,6 @@
 {
   "name": "@juocode/openapi-ts-gen",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Generate typescript sdk from OpenAPI document",
   "main": "dist/lib/index.js",
   "typings": "dist/types/index.d.ts",
