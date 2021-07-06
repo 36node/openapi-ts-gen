@@ -1,5 +1,5 @@
 {
-  "name": "@juocode/openapi-ts-gen",
+  "name": "@36node/openapi-ts-gen",
   "version": "0.1.4",
   "description": "Generate typescript sdk from OpenAPI document",
   "main": "dist/lib/index.js",
@@ -12,10 +12,12 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "release": "standard-version"
   },
   "devDependencies": {
-    "@types/node": "^14.14.20"
+    "@types/node": "^14.14.20",
+    "standard-version": "^9.3.0"
   },
   "dependencies": {
     "change-case": "^4.1.2",
