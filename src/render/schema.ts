@@ -124,9 +124,13 @@ function renderTypeReference(writer: Writer, schema: types.TypeReferenceSchema) 
   writer.writeLine(`export type ${schema.name} = ${schema.typeName}`);
 }
 
+function safeKey(propName: string) {
+  return propName.includes(".") ? `"${propName}"` : propName;
+}
+
 function renderProperties(writer: Writer, schema: types.ObjectSchema) {
   for (const [propName, prop] of schema.properties) {
-    writer.write(propName).conditionalWrite(!prop.required, `?`).write(":").space();
+    writer.write(safeKey(propName)).conditionalWrite(!prop.required, `?`).write(":").space();
     switch (prop.schema.kind) {
       case ts.SyntaxKind.UnionType:
       case ts.SyntaxKind.IntersectionType:
