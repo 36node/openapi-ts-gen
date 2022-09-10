@@ -32,12 +32,12 @@ export function renderClient(ctx: GeneratorContext, writer?: Writer) {
           const replacedPath = replacePathParameter(path);
 
           writer
-            .write(`${name}(req: schemas.${request}, config: AxiosRequestConfig = {}): `)
+            .write(`${name} = (req: schemas.${request}, config: AxiosRequestConfig = {}): `)
             .write(`Response<`)
             .conditionalWrite(response === null, "void")
             .conditionalWrite(response !== null, `schemas.${response?.typeName}`)
             .conditionalWrite(response?.repeated, `[]`)
-            .write(`>`)
+            .write(`> =>`)
             .block(() => {
               writer.conditionalWriteLine(
                 pathParams.length > 0,
