@@ -16,7 +16,7 @@ export function renderClient(ctx: GeneratorContext, writer?: Writer) {
     .write(`export class ${changecase.pascalCase(ctx.name)}APIClient`)
     .block(() => {
       writer
-        .writeLine(`private client: AxiosInstance;`)
+        .writeLine(`public client: AxiosInstance;`)
         .write(`constructor(client: AxiosInstance)`)
         .block(() => {
           writer
