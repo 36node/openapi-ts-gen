@@ -229,6 +229,7 @@ export class GeneratorContext {
       schemaName: "",
     });
     const bodyField: types.Property = {
+      required: node.requestBody.required,
       schema,
     };
     req.properties.set("body", bodyField);
