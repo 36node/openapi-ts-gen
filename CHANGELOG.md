@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://github.com/36node/openapi-ts-gen/compare/v0.2.4...v0.2.5) (2023-12-26)
+
+
+### Bug Fixes
+
+* params end comma ([fb5d1d7](https://github.com/36node/openapi-ts-gen/commit/fb5d1d7dc2df7d6cf55298cd3f3426b9cbbb83f0))
+
 ### [0.2.4](https://github.com/36node/openapi-ts-gen/compare/v0.2.3...v0.2.4) (2022-09-13)
 
 

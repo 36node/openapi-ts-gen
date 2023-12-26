@@ -1,6 +1,6 @@
 {
   "name": "@36node/openapi-ts-gen",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Generate typescript sdk from OpenAPI document",
   "main": "dist/lib/index.js",
   "typings": "dist/types/index.d.ts",
