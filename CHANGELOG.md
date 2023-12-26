@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://github.com/36node/openapi-ts-gen/compare/v0.2.5...v0.2.6) (2023-12-26)
+
+
+### Bug Fixes
+
+* ci pnpm 8 ([12c513a](https://github.com/36node/openapi-ts-gen/commit/12c513a90458a40d1e3cbeed8c86527533a71af8))
+
 ### [0.2.5](https://github.com/36node/openapi-ts-gen/compare/v0.2.4...v0.2.5) (2023-12-26)
 
 
