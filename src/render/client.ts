@@ -54,9 +54,11 @@ export function renderClient(ctx: GeneratorContext, writer?: Writer) {
                     .writeLine(`method: ${JSON.stringify(method)}, `)
                     .conditionalWriteLine(
                       queryParams.length > 0,
-                      `params: pick(req, [${queryParams.map((p) => JSON.stringify(p)).join(", ")}])`
+                      `params: pick(req, [${queryParams
+                        .map((p) => JSON.stringify(p))
+                        .join(", ")}]),`
                     )
-                    .conditionalWriteLine(hasBody, `data: req.body`);
+                    .conditionalWriteLine(hasBody, `data: req.body,`);
                 })
                 // .conditionalWrite(hasBody, `, req.body`)
                 // .conditionalWrite(hasParams, `, {params: {}}`)
