@@ -47,7 +47,11 @@ function renderEnumDeclaration(writer: Writer, schema: types.EnumSchema) {
       if (/^\d/.test(item)) {
         name = `_${item}`;
       }
-      name = changecase.snakeCase(item).toUpperCase();
+      if (/^-/.test(item)) {
+        name = changecase.snakeCase(`${item}Desc`).toUpperCase();;
+      }else{
+        name = changecase.snakeCase(item).toUpperCase();
+      }
     } else {
       name = `${changecase.snakeCase(schema.name).toUpperCase()}_${item}`;
     }
