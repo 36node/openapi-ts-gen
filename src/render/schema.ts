@@ -50,7 +50,7 @@ function renderEnumDeclaration(writer: Writer, schema: types.EnumSchema) {
       if (/^-/.test(item)) {
         name = changecase.snakeCase(`${item}Desc`).toUpperCase();;
       }else{
-          name = changecase.snakeCase(item).toUpperCase();
+        name = changecase.snakeCase(item).toUpperCase();
       }
     } else {
       name = `${changecase.snakeCase(schema.name).toUpperCase()}_${item}`;
