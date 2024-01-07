@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://github.com/36node/openapi-ts-gen/compare/v0.2.6...v0.2.7) (2024-01-07)
+
+
+### Features
+
+* 代码格式优化 ([9440fb7](https://github.com/36node/openapi-ts-gen/commit/9440fb7f38c398c28eeca0be6deff722b1b9281f))
+* 适配排序参数的枚举类型 ([6c7edaa](https://github.com/36node/openapi-ts-gen/commit/6c7edaa2879142efa9b1f1c7e54f7ce60021b477))
+
 ### [0.2.6](https://github.com/36node/openapi-ts-gen/compare/v0.2.5...v0.2.6) (2023-12-26)
 
 
