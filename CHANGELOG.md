@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.8](https://github.com/36node/openapi-ts-gen/compare/v0.2.7...v0.2.8) (2024-03-21)
+
+
+### Features
+
+* only gen json type ([#4](https://github.com/36node/openapi-ts-gen/issues/4)) ([619df7f](https://github.com/36node/openapi-ts-gen/commit/619df7f51741aa419ce35b0ceda0882c98f997c1))
+
 ### [0.2.7](https://github.com/36node/openapi-ts-gen/compare/v0.2.6...v0.2.7) (2024-01-07)
 
 
