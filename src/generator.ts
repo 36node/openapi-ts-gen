@@ -182,7 +182,7 @@ export class GeneratorContext {
       this.resolveParameters(opt, req, node);
     }
     if (node.requestBody) {
-      if (!node.requestBody.content[consts.MIME_JSON]) {
+      if (!node.requestBody.content || !node.requestBody.content[consts.MIME_JSON]) {
         return;
       }
       this.resolveRequestBody(opt, req, node);
