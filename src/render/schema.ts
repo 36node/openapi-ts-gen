@@ -62,6 +62,8 @@ function renderEnumDeclaration(writer: Writer, schema: types.EnumSchema) {
       writer.writeLine(`${item.name} = ${JSON.stringify(item.value)},`);
     });
   });
+
+  writer.writeLine(`export type ${schema.name}Type = typeof ${schema.name}[keyof typeof ${schema.name}];`);
 }
 
 function renderInterfaceDeclaration(writer: Writer, schema: types.ObjectSchema) {
