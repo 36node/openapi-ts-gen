@@ -19,10 +19,24 @@ export class GeneratorContext {
 
   resolve() {
     this.resolveGlobalParameters();
+    if (this.doc.components) {
+      this.schemas = Object.entries(this.doc.components?.schemas || {}).map(([name, node]) => {
+        return this.resolveSchema(node, { schemaName: name });
+      });
+    }
 
-    this.schemas = Object.entries(this.doc.components?.schemas || {}).map(([name, node]) => {
-      return this.resolveSchema(node, { schemaName: name });
-    });
+    if (this.doc.definitions) {
+      this.schemas = Object.entries(this.doc.definitions|| {}).map(([name, node]) => {
+          return this.resolveSchema(node, { schemaName: name });
+      });
+      let uniqueSchemas = this.schemas.reduce((schema, obj) => {
+          if (!schema[obj.name]) {
+              schema[obj.name] = obj;
+          }
+          return schema;
+      }, {});
+      this.schemas = Object.values(uniqueSchemas);
+    }
 
     Object.entries(this.doc.paths).forEach(([path, v]) => {
       Object.entries(v).forEach(([v, o]) => {
@@ -34,9 +48,9 @@ export class GeneratorContext {
   private resolveSchema(node: any, { schemaName }: any): types.Schema {
     if (node.$ref) {
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.TypeReference,
-        typeName: node.$ref.split("/").pop(),
+        typeName: node.$ref.split("/").pop().split(".").pop(),
       };
     }
     if (node.allOf) {
@@ -52,7 +66,7 @@ export class GeneratorContext {
         types.push(res);
       });
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.IntersectionType,
         types,
         schemas: subSchemas,
@@ -69,7 +83,7 @@ export class GeneratorContext {
         }
       });
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.UnionType,
         types,
         schemas: subSchemas,
@@ -77,7 +91,7 @@ export class GeneratorContext {
     }
     if (node.enum) {
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.EnumDeclaration,
         enumType: node.type as any,
         items: node.enum,
@@ -87,14 +101,14 @@ export class GeneratorContext {
       const itemSchema = this.resolveSchema(node.items, { schemaName });
       return {
         ...itemSchema,
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         repeated: true,
       };
     }
     if (node.type === "object") {
       const { properties, subSchemas } = this.resolveObjectSchema(node, { schemaName });
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.ObjectLiteralExpression,
         properties,
         schemas: subSchemas,
@@ -102,21 +116,21 @@ export class GeneratorContext {
     }
     if (node.type === "integer" || node.type === "number") {
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.NumericLiteral,
         typeName: "number",
       };
     }
     if (node.type === "string") {
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.StringLiteral,
         typeName: "string",
       };
     }
     if (node.type === "boolean") {
       return {
-        name: schemaName,
+        name: schemaName.split(".").pop(),
         kind: ts.SyntaxKind.BooleanKeyword,
         typeName: "boolean",
       };
@@ -182,9 +196,6 @@ export class GeneratorContext {
       this.resolveParameters(opt, req, node);
     }
     if (node.requestBody) {
-      if (!node.requestBody.content || !node.requestBody.content[consts.MIME_JSON]) {
-        return;
-      }
       this.resolveRequestBody(opt, req, node);
     }
     this.operations.push(opt);
@@ -200,34 +211,67 @@ export class GeneratorContext {
         }
         paramNode = this.parameters.get(globalParamType);
       }
-      const schema = this.resolveSchema(paramNode.schema, {
-        schemaName: changeCase.pascalCase(paramNode.name),
-      });
-      const field: types.Property = {
-        description: paramNode.description,
-        required: paramNode.required,
-        default: paramNode.schema.default,
-        schema,
-      };
-      if (
-        schema.kind === ts.SyntaxKind.ObjectLiteralExpression ||
-        schema.kind === ts.SyntaxKind.EnumDeclaration
-      ) {
-        req.schemas.push(schema);
+      if (paramNode.schema) {
+        const schema = this.resolveSchema(paramNode.schema, {
+          schemaName: changeCase.pascalCase(paramNode.name),
+        });
+        const field: types.Property = {
+          description: paramNode.description,
+          required: paramNode.required,
+          default: paramNode.schema.default,
+          schema,
+        };
+        if (
+          schema.kind === ts.SyntaxKind.ObjectLiteralExpression ||
+          schema.kind === ts.SyntaxKind.EnumDeclaration
+        ) {
+          req.schemas.push(schema);
+        }
+        switch (paramNode.in) {
+          case "path":
+            opt.pathParams.push(paramNode.name);
+            break;
+          case "query":
+            opt.queryParams.push(paramNode.name);
+            break;
+        }
+        req.properties.set(paramNode.name, field);
+      } else {
+        const schema = this.resolveSchema(paramNode, {
+            schemaName: changeCase.pascalCase(paramNode.name),
+        });
+        const field = {
+            description: paramNode.description,
+            required: false,
+            default: paramNode.default,
+            schema,
+        };
+        if (paramNode.required) {
+            field.required = paramNode.required
+        }
+        if (
+            schema.kind === ts.SyntaxKind.ObjectLiteralExpression ||
+            schema.kind === ts.SyntaxKind.EnumDeclaration
+        ) {
+            req.schemas.push(schema);
+        }
+        switch (paramNode.in) {
+            case "path":
+                opt.pathParams.push(paramNode.name);
+                break;
+            case "query":
+                opt.queryParams.push(paramNode.name);
+                break;
+        }
+        req.properties.set(paramNode.name, field);
       }
-      switch (paramNode.in) {
-        case "path":
-          opt.pathParams.push(paramNode.name);
-          break;
-        case "query":
-          opt.queryParams.push(paramNode.name);
-          break;
-      }
-      req.properties.set(paramNode.name, field);
     });
   }
 
   private resolveRequestBody(opt: types.Operation, req: types.ObjectSchema, node: any) {
+    if (!node.requestBody.content || !node.requestBody.content[consts.MIME_JSON]) {
+      return;
+    }
     const schema = this.resolveSchema(node.requestBody.content[consts.MIME_JSON].schema, {
       schemaName: "",
     });
@@ -248,6 +292,12 @@ export class GeneratorContext {
     if (code === "204") {
       return null;
     }
+
+    if (!resp.content || !resp.content[consts.MIME_JSON]) {
+      const { schema } = resp;
+      return this.resolveSchema(schema, { schemaName: "" });
+  } 
+  
     const { schema } = resp.content[consts.MIME_JSON];
     return this.resolveSchema(schema, { schemaName: "" });
   }
@@ -259,11 +309,11 @@ function getConventionalResponse(
 ): { code: string; resp: any } | undefined {
   // https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
   const conventionalResponse: Record<string, string[]> = {
-    get: ["200"],
+    get: ["200", "201"],
     post: ["200", "201", "204"],
-    put: ["200", "204"],
-    patch: ["200", "204"],
-    delete: ["200", "202", "204"],
+    put: ["200", "201", "204"],
+    patch: ["200", "201", "204"],
+    delete: ["200", "201", "202", "204"],
   };
   const codes = conventionalResponse[method];
   if (!codes) {
