@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.10](https://github.com/36node/openapi-ts-gen/compare/v0.2.9...v0.2.10) (2024-08-03)
+
+
+### Features
+
+*  支持swagger格式扩展，生成 ts sdk代码 ([#7](https://github.com/36node/openapi-ts-gen/issues/7)) ([f102880](https://github.com/36node/openapi-ts-gen/commit/f102880461548152bcf764d548f060b65504065e))
+
 ### [0.2.8](https://github.com/36node/openapi-ts-gen/compare/v0.2.7...v0.2.8) (2024-03-21)
 
 
