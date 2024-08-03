@@ -36,7 +36,7 @@ export function renderClient(ctx: GeneratorContext, writer?: Writer) {
             .write(`Response<`)
             .conditionalWrite(response === null, "void")
             .conditionalWrite(response !== null && response.typeName !== "string" && response.typeName !== "number", `schemas.${response?.typeName}`)
-            .conditionalWrite(response !== null && response.typeName === "string" || response.typeName == "number", `${response?.typeName}`)
+            .conditionalWrite(response !== null && (response.typeName === "string" || response.typeName == "number"), `${response?.typeName}`)
             .conditionalWrite(response?.repeated, `[]`)
             .write(`> =>`)
             .block(() => {
